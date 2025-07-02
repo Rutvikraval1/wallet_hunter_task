@@ -18,6 +18,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
+  final AuthController authController = Get.find<AuthController>();
   bool _isRefreshing = false;
 
   // Mock data for dashboard
@@ -376,9 +377,9 @@ class _DashboardScreenState extends State<DashboardScreen>
           SizedBox(height: 3.h),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/family-head-registration-screen');
+              authController.logout();
             },
-            child: Text("Edit Profile"),
+            child: Text("Logout"),
           ),
         ],
       ),

@@ -181,6 +181,7 @@ class _AddMemberModalWidgetState extends State<AddMemberModalWidget> {
         "relationship": _selectedRelationship,
         "maritalStatus": _selectedMaritalStatus,
         "bloodGroup": _selectedBloodGroup,
+        "generation": 1,
         "birthDate": _selectedBirthDate?.toIso8601String(),
         "age": _selectedBirthDate != null
             ? DateTime.now().difference(_selectedBirthDate!).inDays ~/ 365

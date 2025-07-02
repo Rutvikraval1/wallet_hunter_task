@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/app_export.dart';
@@ -102,10 +103,6 @@ class _SplashScreenState extends State<SplashScreen>
       if (isAuthenticated) {
         // Navigate to dashboard for authenticated family heads
         Navigator.pushReplacementNamed(context, '/dashboard-screen');
-      } else if (isNewUser) {
-        // Navigate to registration flow for new users
-        Navigator.pushReplacementNamed(
-            context, '/family-head-registration-screen');
       } else {
         // Navigate to OTP verification for returning users
         Navigator.pushReplacementNamed(context, '/otp-authentication-screen');
@@ -114,10 +111,10 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<bool> _mockAuthenticationCheck() async {
+    final prefs = await SharedPreferences.getInstance();
     // Simulate network call with potential timeout
     await Future.delayed(const Duration(milliseconds: 300));
-    // Mock: 30% chance user is authenticated
-    return DateTime.now().millisecond % 10 < 3;
+    return prefs.getBool('isAuthenticated')??false;
   }
 
   Future<bool> _mockNewUserCheck() async {

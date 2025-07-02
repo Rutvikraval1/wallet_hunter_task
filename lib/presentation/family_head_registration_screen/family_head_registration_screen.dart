@@ -29,9 +29,9 @@ class _FamilyHeadRegistrationScreenState
 
   // Form data storage
   final Map<String, dynamic> _formData = {
-    'personalInfo': {},
-    'contactInfo': {},
-    'addressInfo': {},
+    'personalInfo': <String, dynamic>{},
+    'contactInfo': <String, dynamic>{},
+    'addressInfo': <String, dynamic>{},
   };
 
   final FamilyController _familyController = Get.find<FamilyController>();
@@ -190,7 +190,7 @@ class _FamilyHeadRegistrationScreenState
                       children: [
                         PersonalInfoSectionWidget(
                           formKey: _personalInfoFormKey,
-                          formData: _formData['personalInfo']??{},
+                          formData: _formData['personalInfo'],
                           genderOptions: _genderOptions,
                           maritalStatusOptions: _maritalStatusOptions,
                           samajOptions: _samajOptions,

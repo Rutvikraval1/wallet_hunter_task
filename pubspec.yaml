@@ -23,6 +23,8 @@ dependencies:
   permission_handler: ^11.0.1
   web: any
   intl_phone_field: ^3.2.0
+  firebase_auth: any
+  firebase_core: any
 
 dev_dependencies: 
   flutter_test: 

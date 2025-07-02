@@ -29,7 +29,7 @@ class AppRoutes {
     ),
     GetPage(
       name: otpAuthenticationScreen,
-      page: () => const OtpAuthenticationScreen(),
+      page: () =>  OtpAuthenticationScreen(),
     ),
     GetPage(
       name: familyHeadRegistrationScreen,

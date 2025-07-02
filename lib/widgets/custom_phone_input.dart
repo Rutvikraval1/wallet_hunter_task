@@ -100,7 +100,7 @@ class _CustomPhoneInputState extends State<CustomPhoneInput> {
             height: 48,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(8),
+              // borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               children: [
@@ -120,7 +120,7 @@ class _CustomPhoneInputState extends State<CustomPhoneInput> {
             height: 48,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(8),
+              // borderRadius: BorderRadius.circular(8),
             ),
             child: TextField(
               keyboardType: TextInputType.phone,

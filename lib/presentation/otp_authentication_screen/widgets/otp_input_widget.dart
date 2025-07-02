@@ -31,72 +31,7 @@ class OtpInputWidget extends StatelessWidget {
         SizedBox(height: 2.h),
 
         // OTP Input Boxes
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(6, (index) {
-            return Container(
-              width: 12.w,
-              height: 12.w,
-              decoration: BoxDecoration(
-                color: AppTheme.lightTheme.colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: controller.text.length > index
-                      ? AppTheme.lightTheme.primaryColor
-                      : AppTheme.lightTheme.colorScheme.outline
-                          .withValues(alpha: 0.3),
-                  width: controller.text.length > index ? 2.0 : 1.5,
-                ),
-                boxShadow: controller.text.length > index
-                    ? [
-                        BoxShadow(
-                          color: AppTheme.lightTheme.primaryColor
-                              .withValues(alpha: 0.1),
-                          blurRadius: 8,
-                          offset: Offset(0, 2),
-                        ),
-                      ]
-                    : [
-                        BoxShadow(
-                          color: AppTheme.lightTheme.colorScheme.shadow
-                              .withValues(alpha: 0.05),
-                          blurRadius: 4,
-                          offset: Offset(0, 1),
-                        ),
-                      ],
-              ),
-              child: Center(
-                child: Text(
-                  controller.text.length > index ? controller.text[index] : '',
-                  style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
-                    color: AppTheme.lightTheme.colorScheme.onSurface,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            );
-          }),
-        ),
-
-        // Hidden TextField for auto-fill functionality
-        Opacity(
-          opacity: 0.0,
-          child: SizedBox(
-            height: 0,
-            child: TextFormField(
-              controller: controller,
-              focusNode: focusNode,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(6),
-              ],
-              onChanged: onChanged,
-              autofillHints: [AutofillHints.oneTimeCode],
-            ),
-          ),
-        ),
-
+        OTPFields(onCompleted: (value){onChanged!(value);}),
         SizedBox(height: 3.h),
 
         // Helper Text
@@ -120,54 +55,74 @@ class OtpInputWidget extends StatelessWidget {
             ),
           ],
         ),
-
         SizedBox(height: 1.h),
 
-        // Mock OTP Info
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(3.w),
-          decoration: BoxDecoration(
-            color:
-                AppTheme.lightTheme.colorScheme.tertiary.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: AppTheme.lightTheme.colorScheme.tertiary
-                  .withValues(alpha: 0.3),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CustomIconWidget(
-                    iconName: 'developer_mode',
-                    color: AppTheme.lightTheme.colorScheme.tertiary,
-                    size: 4.w,
-                  ),
-                  SizedBox(width: 2.w),
-                  Text(
-                    'Testing Mode',
-                    style: AppTheme.lightTheme.textTheme.labelLarge?.copyWith(
-                      color: AppTheme.lightTheme.colorScheme.tertiary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 1.h),
-              Text(
-                'Use OTP: 123456 for testing',
-                style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                  color: AppTheme.lightTheme.colorScheme.onSurface
-                      .withValues(alpha: 0.7),
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
 }
+
+class OTPFields extends StatefulWidget {
+  final void Function(String otp) onCompleted;
+
+  const OTPFields({super.key, required this.onCompleted});
+
+  @override
+  State<OTPFields> createState() => _OTPFieldsState();
+}
+
+class _OTPFieldsState extends State<OTPFields> {
+  final List<FocusNode> _focusNodes =
+  List.generate(6, (_) => FocusNode(), growable: false);
+  final List<TextEditingController> _controllers =
+  List.generate(6, (_) => TextEditingController(), growable: false);
+
+  @override
+  void dispose() {
+    for (final node in _focusNodes) {
+      node.dispose();
+    }
+    for (final controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _onChanged(String value, int index) {
+    if (value.length == 1 && index < 5) {
+      _focusNodes[index + 1].requestFocus();
+    } else if (value.isEmpty && index > 0) {
+      _focusNodes[index - 1].requestFocus();
+    }
+
+    final otp = _controllers.map((c) => c.text).join();
+    if (otp.length == 6) {
+      widget.onCompleted(otp);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(6, (index) {
+        return SizedBox(
+          width: 45,
+          child: TextField(
+            controller: _controllers[index],
+            focusNode: _focusNodes[index],
+            keyboardType: TextInputType.number,
+            textAlign: TextAlign.center,
+            maxLength: 1,
+            decoration: const InputDecoration(
+              counterText: '',
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) => _onChanged(value, index),
+          ),
+        );
+      }),
+    );
+  }
+}
+

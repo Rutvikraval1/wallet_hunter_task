@@ -92,7 +92,7 @@ class InteractiveFamilyTreeScreen extends StatelessWidget {
                         final position =
                             member['position'] as Map<String, dynamic>;
                         return Positioned(
-                          left: (00.w + (position['x'] as double)),
+                          left: (010.w + (position['x'] as double)),
                           top: (05.h + (position['y'] as double)),
                           child: FamilyTreeNodeWidget(
                             member: member,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/app_export.dart';
@@ -13,12 +14,8 @@ class AuthController extends GetxController {
   final RxString phoneNumber = ''.obs;
   final RxString otp = ''.obs;
   final RxBool isAuthenticated = false.obs;
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   Timer? _countdownTimer;
-
-  // Mock credentials for testing
-  final String _mockPhoneNumber = '9876543210';
-  final String _mockOtp = '123456';
 
   @override
   void onInit() {
@@ -38,65 +35,81 @@ class AuthController extends GetxController {
   }
 
   void updatePhoneNumber(String phone) {
+    print("updatePhoneNumber : $phone");
     phoneNumber.value = phone;
     errorMessage.value = '';
   }
 
   void updateOtp(String otpValue) {
+    print("otpValue : $otpValue");
     otp.value = otpValue;
     errorMessage.value = '';
   }
 
   Future<void> sendOtp() async {
+    print("phoneNumber.value ${phoneNumber.value}");
     final phone = phoneNumber.value.replaceAll('+91 ', '').trim();
 
     if (phone.length != 10) {
       errorMessage.value = 'Please enter a valid 10-digit mobile number';
       return;
     }
-
     isLoading.value = true;
     errorMessage.value = '';
-
     try {
       // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
-
-      if (phone == _mockPhoneNumber) {
-        isOtpSent.value = true;
-        _startResendCountdown();
-      } else {
-        errorMessage.value =
-            'Phone number not registered. Please use $_mockPhoneNumber for testing.';
-      }
+      await _auth.verifyPhoneNumber(
+          timeout: const Duration(minutes: 2),
+          phoneNumber: phoneNumber.value,
+          verificationCompleted: (PhoneAuthCredential credential) async {},
+          verificationFailed: (FirebaseAuthException e) {
+            print("FirebaseAuthException");
+            print(e);
+            errorMessage.value = 'Failed to send OTP. Please try again.';
+          },
+          codeSent: (String verif_Id, int? resendToken) async {
+            isOtpSent.value = true;
+            verificationId.value = verif_Id;
+            resendTokenId.value = resendToken ?? 0;
+            _startResendCountdown();
+            isLoading.value = false;
+          },
+          codeAutoRetrievalTimeout: (String verifId) {
+            verificationId.value = verifId;
+          });
     } catch (e) {
       errorMessage.value = 'Failed to send OTP. Please try again.';
-    } finally {
-      isLoading.value = false;
     }
   }
+
+  RxString verificationId = "".obs;
+  RxInt resendTokenId = 0.obs;
 
   Future<void> verifyOtp() async {
     if (otp.value.length != 6) {
       errorMessage.value = 'Please enter the complete 6-digit OTP';
       return;
     }
-
     isLoading.value = true;
     errorMessage.value = '';
-
     try {
       // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
-
-      if (otp.value == _mockOtp) {
+      final credential = PhoneAuthProvider.credential(
+        verificationId: verificationId.value,
+        smsCode: otp.value,
+      );
+      if(credential!=null){
         await _saveAuthState();
         isAuthenticated.value = true;
-        Get.offAllNamed(AppRoutes.familyHeadRegistrationScreen);
-      } else {
-        errorMessage.value = 'Invalid OTP. Please use $_mockOtp for testing.';
+        Get.offAllNamed(AppRoutes.dashboardScreen);
       }
+
+      // final result = await _auth.signInWithCredential(credential);
+      // print("result : ${result.user}");
     } catch (e) {
+      print("error : $e");
       errorMessage.value = 'Failed to verify OTP. Please try again.';
     } finally {
       isLoading.value = false;
@@ -109,10 +122,35 @@ class AuthController extends GetxController {
     isLoading.value = true;
     errorMessage.value = '';
 
+    final phone =
+        phoneNumber.value.replaceAll('+91', '').replaceAll(' ', '').trim();
+    if (phone.length != 10) {
+      errorMessage.value = 'Invalid phone number';
+      isLoading.value = false;
+      return;
+    }
+
     try {
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 1));
-      _startResendCountdown();
+      await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber.value,
+        timeout: const Duration(seconds: 60),
+        forceResendingToken:
+            resendTokenId.value == 0 ? null : resendTokenId.value,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          // Auto-complete (optional)
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          errorMessage.value = 'Resend failed: ${e.message ?? 'Unknown error'}';
+        },
+        codeSent: (String verifId, int? token) {
+          verificationId.value = verifId;
+          resendTokenId.value = token ?? 0;
+          _startResendCountdown();
+        },
+        codeAutoRetrievalTimeout: (String verifId) {
+          verificationId.value = verifId;
+        },
+      );
     } catch (e) {
       errorMessage.value = 'Failed to resend OTP. Please try again.';
     } finally {

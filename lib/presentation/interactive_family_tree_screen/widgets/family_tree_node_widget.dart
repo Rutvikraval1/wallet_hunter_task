@@ -20,6 +20,7 @@ class FamilyTreeNodeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final generation = member["generation"] as int;
+    print("generation $generation");
     final nodeSize =
         generation == 0 ? 60.0 : 50.0; // Family head gets larger node
 

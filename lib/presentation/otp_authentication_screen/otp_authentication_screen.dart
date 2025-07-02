@@ -155,11 +155,10 @@ class OtpAuthenticationScreen extends StatelessWidget {
                             onPressed: authController.isLoading.value
                                 ? null
                                 : () {
+                              FocusScope.of(context).requestFocus(FocusNode());
                                     if (authController.isOtpSent.value) {
                                       authController.verifyOtp();
                                     } else {
-                                      authController.updatePhoneNumber(
-                                          phoneController.text);
                                       authController.sendOtp();
                                     }
                                   },

@@ -1,0 +1,2 @@
+D:/Freelenacer_project/wallet_hunter/wallet_hunter/android/app/.cxx/Debug/3u3d5x5t/x86_64/CMakeFiles/edit_cache.dir
+D:/Freelenacer_project/wallet_hunter/wallet_hunter/android/app/.cxx/Debug/3u3d5x5t/x86_64/CMakeFiles/rebuild_cache.dir

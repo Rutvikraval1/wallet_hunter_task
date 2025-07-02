@@ -47,7 +47,7 @@ class FamilyHeadSummaryWidget extends StatelessWidget {
                 ),
                 child: ClipOval(
                   child: CustomImageWidget(
-                    imageUrl: familyHead["profilePhoto"] as String,
+                    imageUrl: familyHead["profilePhoto"] ??'',
                     width: 16.w,
                     height: 16.w,
                     fit: BoxFit.cover,
