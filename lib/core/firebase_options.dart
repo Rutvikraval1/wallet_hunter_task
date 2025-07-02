@@ -17,11 +17,11 @@ class DefaultFirebaseOptions {
   }
   /// Production mode
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCX4ut6XUyJewFRSBmpFRErrkKGJGRPaiY',
-    appId: '1:756208192158:android:d33a3ecd344d6922a7498f',
-    messagingSenderId: '756208192158',
-    projectId: 'my-neber-development',
-    storageBucket: 'my-neber-development.appspot.com',
+    apiKey: '',
+    appId: '',
+    messagingSenderId: '',
+    projectId: '',
+    storageBucket: '',
   );
 
 

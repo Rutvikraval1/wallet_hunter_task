@@ -20,43 +20,40 @@ flutter pub get
 ```bash
 flutter run
 ```
+## 📦 Download
 
-[//]: # (## 📁 Project Structure)
+[⬇️ Download APK](screenshot/app-release.apk)
 
-[//]: # ()
-[//]: # (```)
+## 🎬 Demo
 
-[//]: # (flutter_app/)
+[![Demo Video](screenshot/app_video.mp4)](screenshot/app_video.mp4)
 
-[//]: # (├── android/            # Android-specific configuration)
+## 📸 Screenshots
 
-[//]: # (├── ios/                # iOS-specific configuration)
+<table>
+  <tr>
+    <td><img src="screenshot/a.jpg" width="250"/></td>
+    <td><img src="screenshot/b.jpg" width="250"/></td>
+    <td><img src="screenshot/c.jpg" width="250"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshot/d.jpg" width="250"/></td>
+    <td><img src="screenshot/e.jpg" width="250"/></td>
+    <td><img src="screenshot/f.jpg" width="250"/></td>
+  </tr>
+    <tr>
+    <td><img src="screenshot/g.jpg" width="250"/></td>
+    <td><img src="screenshot/h.jpg" width="250"/></td>
+    <td><img src="screenshot/i.jpg" width="250"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshot/j.jpg" width="250"/></td>
+    <td><img src="screenshot/k.jpg" width="250"/></td>
+  </tr>
+</table>
 
-[//]: # (├── lib/)
 
-[//]: # (│   ├── core/           # Core utilities and services)
 
-[//]: # (│   │   └── utils/      # Utility classes)
-
-[//]: # (│   ├── presentation/   # UI screens and widgets)
-
-[//]: # (│   │   └── splash_screen/ # Splash screen implementation)
-
-[//]: # (│   ├── routes/         # Application routing)
-
-[//]: # (│   ├── theme/          # Theme configuration)
-
-[//]: # (│   ├── widgets/        # Reusable UI components)
-
-[//]: # (│   └── main.dart       # Application entry point)
-
-[//]: # (├── assets/             # Static assets &#40;images, fonts, etc.&#41;)
-
-[//]: # (├── pubspec.yaml        # Project dependencies and configuration)
-
-[//]: # (└── README.md           # Project documentation)
-
-[//]: # (```)
 
 ## 🧩 Adding Routes
 
